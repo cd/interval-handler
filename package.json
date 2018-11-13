@@ -1,0 +1,31 @@
+{
+  "name": "interval-handler",
+  "version": "0.1.0",
+  "description": "A super tiny library to manage timers and intervals in a sequence",
+  "main": "interval-handler.js",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint . --ext .js",
+    "docs": "jsdoc2md --template README.hbs --files interval-handler.js > README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cd/interval-handler.git"
+  },
+  "author": "Christian Diederich <cdiede@t-online.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cd/interval-handler/issues"
+  },
+  "homepage": "https://github.com/cd/interval-handler#readme",
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^5.2.0"
+  }
+}
