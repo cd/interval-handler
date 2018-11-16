@@ -99,7 +99,7 @@ Starts the function's timer again without setting the internal 'reached' flag fo
 <a name="IntervalHandler+event"></a>
 
 ### intervalHandler.event(fncArr) ⇒ [<code>IntervalHandler</code>](#IntervalHandler)
-Attaches functions to a section as an event.When all functions in the current section finished at least once,all functions in the event will be called.
+Attaches functions to a section as an event.When all functions in the current section finished at least once,all functions in the event will be called.An event have to be placed after the corresponding section.
 
 **Kind**: instance method of [<code>IntervalHandler</code>](#IntervalHandler)  
 
