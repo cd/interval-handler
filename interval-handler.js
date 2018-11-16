@@ -174,16 +174,19 @@ IntervalHandler.prototype = {
    * Attaches functions to a section as an event.
    * When all functions in the current section finished at least once,
    * all functions in the event will be called.
+   * An event have to be placed after the corresponding section.
    * @param {Array.<function>} fncArr
    * @return {IntervalHandler}
    */
   event (fncArr) {
-    fncArr.forEach(fnc => {
-      this._events.push({
-        fnc,
-        sectionIndex: this._sections.length - 1
+    if (this._sections.length > 0) {
+      fncArr.forEach(fnc => {
+        this._events.push({
+          fnc,
+          sectionIndex: this._sections.length - 1
+        })
       })
-    })
+    }
     return this
   },
 
