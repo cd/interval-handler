@@ -1,25 +1,11 @@
 /**
- * Timer object desc..
- * @typedef {object} timer
- * @property {function} fnc Funcion
- * @property {number} [interval] Interval
- * @property {boolean} [immediateCall] Option to execute timers function immediately.
- */
-
-/**
- * Handlers option object desc..
- * @typedef {object} options
- * @property {number} [interval] Interval
- * @property {boolean} [immediateCall] Option to execute timers function immediately.
- */
-
-/**
- * Handles a sequence of sections, consisting of functions.
+ * Handles a sequence of sections consisting of functions.
  * @constructor
- * @param {options} options - Additional options
- * @return {object} Handler object
+ * @param {options} [options] Additional options. Defines the default behavior. Custom properties are allowed.
+ * @param {number} [options.interval] Default timer interval.
+ * @param {number} [options.immediateCall] Default option to call functions immediately when a section starts.
+ * @return {IntervalHandler}
  */
-
 function IntervalHandler (options) {
   let handler = Object.create(IntervalHandler.prototype)
   if (options) Object.assign(handler, options)
@@ -29,28 +15,23 @@ function IntervalHandler (options) {
   return handler
 }
 
-/**
- * Desc
- */
 IntervalHandler.prototype = {
-
   /**
-   * Default interval duration of all functions.
+   * Default timer interval.
    * @type {number}
    * @default
    */
   interval: 2000,
 
   /**
-   * If this option is true, functions will be called immediatly by default.
-   * Otherwise, after a section starts, function will be executed after the timer duration.
+   * Default option to call functions immediately when a section starts.
    * @type {boolean}
    * @default
    */
   immediateCall: true,
 
   /**
-   * Executes a function.
+   * Calls a function.
    * @param {object} timer
    * @private
    */
@@ -60,7 +41,8 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * Starts all functions and timers in a section.
+   * All functions with the 'immediateCall' option will be called directly.
+   * Otherwise the timers to call the functions will be started.
    * @private
    */
   _startSection () {
@@ -86,7 +68,8 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * Selects next section.
+   * Activates the next section.
+   * @return {boolean} Result of the operation.
    * @private
    */
   _increaseSectionIndex () {
@@ -98,8 +81,8 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * Sets a flag to a timer when its function completed.
-   * If all timer functions completed, it will executes event functions once-only.
+   * Sets a flag to a timer when its function completes.
+   * If all functions are finished at the first time, the attached event functions will be called.
    * @param {object} timer
    * @private
    */
@@ -116,9 +99,12 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * Adds a section of timer objects
-   * @param {timer[]} section Array of timer objects
-   * @return {IntervalHandler} Handler object
+   * Adds a section of functions to a sequence.
+   * @param {Object[]} section
+   * @param {function} section[].fnc Function to call.
+   * @param {number} [section[].interval] Interval rate to call the timer's function.
+   * @param {number} [section[].immediateCall] Option to call the function immediately when a section starts.
+   * @return {IntervalHandler}
    */
   add (section) {
     const timers = []
@@ -139,18 +125,18 @@ IntervalHandler.prototype = {
 
   /**
    * Starts the sequence of sections from the beginning.
-   * @return {IntervalHandler} Handler object
+   * @return {IntervalHandler}
    */
   start () {
-    // todo: beende alle timer die eventuell noch vor dem vorherigen durchlauf aktiv sind
     this._currentSectionIndex = 0
     this._startSection()
     return this
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Stops all timers and starts the next section.
+   * If there is no next section, nothing happens anymore.
+   * @return {IntervalHandler}
    */
   next () {
     this._stopSection()
@@ -159,8 +145,10 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Starts the function's timer again.
+   * @param {timer} [timer]
+   * @param {number} [interval] Option to change the interval duration just for the next run.
+   * @return {IntervalHandler}
    */
   again (timer, interval) {
     if (!timer) return this
@@ -170,8 +158,10 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Starts the function's timer again without setting the internal 'reached' flag for events.
+   * @param {timer} [timer]
+   * @param {number} [interval] Interval duration only for the next run.
+   * @return {IntervalHandler}
    */
   tryAgain (timer, interval) {
     if (!timer) return this
@@ -181,22 +171,26 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Attaches functions to a section as an event.
+   * When all functions in the current section finished at least once,
+   * all functions in the event will be called.
+   * @param {Array.<function>} fncArr
+   * @return {IntervalHandler}
    */
   event (fncArr) {
     fncArr.forEach(fnc => {
       this._events.push({
         fnc,
-        sectionIndex: this._sections.length - 1 // todo: was ist wenn event am anfang steht?
+        sectionIndex: this._sections.length - 1
       })
     })
     return this
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Tags the function as finished and does not start the timer again.
+   * @param {timer} timer
+   * @return {IntervalHandler}
    */
   done (timer) {
     if (!timer) return this
@@ -209,8 +203,8 @@ IntervalHandler.prototype = {
   },
 
   /**
-   * todo...
-   * @return {IntervalHandler} Handler object
+   * Stops all function's timers.
+   * @return {IntervalHandler}
    */
   stopAll () {
     this._sections.forEach(section => {
