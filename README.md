@@ -57,6 +57,7 @@ Adds a section of functions to a sequence.
 | --- | --- | --- |
 | section | <code>Array.&lt;Object&gt;</code> |  |
 | section[].fnc | <code>function</code> | Function to call. |
+| section[].args | <code>array</code> | Functions arguments |
 | [section[].interval] | <code>number</code> | Interval rate to call the timer's function. |
 | [section[].immediateCall] | <code>number</code> | Option to call the function immediately when a section starts. |
 
