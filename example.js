@@ -4,7 +4,7 @@ let counter = 0
 
 myIntervals
   // 1. API-Login
-  .add([{ fnc: login }])
+  .add([{ fnc: login, args: ['myUserName', 'pw'] }])
 
   // 2. Get once-only init data from two api functions.
   .add([{ fnc: getInitData1 }, { fnc: getInitData2 }])
@@ -21,8 +21,8 @@ myIntervals
   // Start my interval plan
   .start()
 
-function login (timer) {
-  console.log('Logged in!')
+function login (timer, user, passwort) {
+  console.log(`Logged in as ${user}!`)
   myIntervals.done(timer)
 }
 

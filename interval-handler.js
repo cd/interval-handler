@@ -37,7 +37,7 @@ IntervalHandler.prototype = {
    */
   _fire (timer) {
     timer.startingTime = Date.now()
-    timer.fnc(timer)
+    timer.fnc(timer, ...timer.fncArgs)
   },
 
   /**
@@ -102,6 +102,7 @@ IntervalHandler.prototype = {
    * Adds a section of functions to a sequence.
    * @param {Object[]} section
    * @param {function} section[].fnc Function to call.
+   * @param {array} section[].args Functions arguments
    * @param {number} [section[].interval] Interval rate to call the timer's function.
    * @param {number} [section[].immediateCall] Option to call the function immediately when a section starts.
    * @return {IntervalHandler}
@@ -111,6 +112,7 @@ IntervalHandler.prototype = {
     section.forEach(timer => {
       timers.push({
         fnc: timer.fnc,
+        fncArgs: timer.args || [],
         interval: timer.interval || this.interval,
         immediateCall: timer.immediateCall || this.immediateCall,
         timerId: null,
