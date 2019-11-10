@@ -20,8 +20,6 @@
 
   /**
    * Constructor function
-   * @param  {object} options
-   * @param  {string} [selector]
    */
   var IntervalHandler = function() {
     this.timer = [];
@@ -30,7 +28,7 @@
   // Default interval
   IntervalHandler.interval = 3000;
 
-  IntervalHandler.prototype._getIntervalHandler = function(fnc) {
+  IntervalHandler.prototype._getTimer = function(fnc) {
     var found = null;
     this.timer.forEach(function(timer) {
       if (timer.fnc === fnc) {
@@ -50,18 +48,20 @@
   /**
    * Set Timer
    */
-  IntervalHandler.prototype.setTimer = function(fnc, options) {
-    options = options || {};
+  IntervalHandler.prototype.setTimer = function(fnc, interval) {
     if (typeof fnc !== "function") return;
-    var timer = this._getIntervalHandler(fnc) || this._createTimer(fnc);
+    var timer = this._getTimer(fnc) || this._createTimer(fnc);
     if (timer.id !== null) this.clearTimer(timer.fnc);
     var args = [];
     for (var index = 2; index < arguments.length; index++) {
       args.push(arguments[index]);
     }
-    timer.id = root.setTimeout(function() {
-      timer.fnc.apply(options.args || []);
-    }, options.interval || IntervalHandler.interval);
+    timer.id = root.setTimeout(
+      function() {
+        timer.fnc.apply(root, args);
+      },
+      typeof interval === "number" ? interval : IntervalHandler.interval
+    );
   };
 
   /**

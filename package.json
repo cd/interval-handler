@@ -1,7 +1,7 @@
 {
   "name": "interval-handler",
-  "version": "0.2.0",
-  "description": "A super tiny library to manage timers and intervals in JavaScript",
+  "version": "0.3.0",
+  "description": "A super tiny library to manage timers in JavaScript",
   "main": "interval-handler.js",
   "repository": {
     "type": "git",
